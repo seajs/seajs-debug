@@ -93,7 +93,7 @@
     var html =
         "<div id=\"seajs-debug-console\">" +
         "  <h3>Sea.js Debug Console</h3>" +
-        "  <label>Config file: <input value=\"" + configFile + "\"/></label><br/>" +
+        "  <label>Config File: <input value=\"" + configFile + "\"/></label><br/>" +
         "  <button>Exit</button>" +
         "  <button>Hide</button>" +
         "  <button>Save</button>" +
