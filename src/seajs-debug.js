@@ -23,7 +23,7 @@
 
   // Load the map file
   if (config.mapfile) {
-    doc.title = "[seajs debug mode] - " + doc.title
+    doc.title = "[Sea.js Debug Mode] - " + doc.title
     seajs.config({
       preload: config.mapfile
     })
@@ -185,7 +185,8 @@
   }
 
 
-  define(seajs.data.dir + "plugin-debug", [], {})
+  // Register as module
+  define("seajs-debug", [], {})
 
 })(seajs, this, document, location);
 
