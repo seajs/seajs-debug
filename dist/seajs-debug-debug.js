@@ -21,17 +21,17 @@
     })
   }
 
-  // Load the map file
-  if (config.mapfile) {
+  // Load the config file
+  if (config.configFile) {
     doc.title = "[Sea.js Debug Mode] - " + doc.title
     seajs.config({
-      preload: config.mapfile
+      preload: config.configFile
     })
   }
 
   // Show console window
   if (config.console) {
-    showConsole(config.mapfile)
+    showConsole(config.configFile)
   }
 
   // Add find method to seajs in debug mode
@@ -58,7 +58,7 @@
 
   // Helpers
 
-  function showConsole(mapfile) {
+  function showConsole(configFile) {
     var style =
         "#seajs-debug-debug-console { " +
         "  position: fixed; bottom: 10px; " +
@@ -93,7 +93,7 @@
     var html =
         "<div id=\"seajs-debug-debug-console\">" +
         "  <h3>Sea.js Debug Console</h3>" +
-        "  <label>Map file: <input value=\"" + mapfile + "\"/></label><br/>" +
+        "  <label>Config file: <input value=\"" + configFile + "\"/></label><br/>" +
         "  <button>Exit</button>" +
         "  <button>Hide</button>" +
         "  <button>Save</button>" +
@@ -110,7 +110,7 @@
     // save
     buttons[2].onclick = function() {
       var href = div.getElementsByTagName("input")[0].value || ""
-      config.mapfile = href
+      config.configFile = href
       saveConfig(config)
       loc.reload()
     }
@@ -141,7 +141,7 @@
     var parts = cookie.split("`")
     return {
       debug: Number(parts[0]) || 0,
-      mapfile: parts[1] || "",
+      configFile: parts[1] || "",
       console: Number(parts[2]) || 0
     }
   }
@@ -150,10 +150,9 @@
     var date = new Date()
     date.setTime(date.getTime() + 30 * 86400000) // 30 days
 
-    doc.cookie = "seajs-debug-debug=" + o.debug + "`" + o.mapfile + "`" +
+    doc.cookie = "seajs-debug-debug=" + o.debug + "`" + o.configFile + "`" +
         o.console + "; path=/; expires=" + date.toUTCString()
   }
-
 
   function appendToBody(div) {
     pollCount++
