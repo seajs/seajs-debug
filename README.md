@@ -18,3 +18,4 @@ Usage
 1. Add `?seajs-debug` to page uri.
 2. You will see a float box.
 
+For more details please visit [中文文档](https://github.com/seajs/seajs-debug/issues/4)
