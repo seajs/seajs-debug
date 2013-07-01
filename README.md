@@ -15,7 +15,15 @@ Install with spm:
 Usage
 -----
 
-1. Add `?seajs-debug` to page uri.
-2. You will see a float box.
+1. Config alias:
+   ```js
+   seajs.config({
+     "alias": {
+       "seajs-debug": "path/to/seajs-debug"
+     }
+   })
+   ```
+2. Add `?seajs-debug` to page uri.
+3. You will see a float box.
 
 For more details please visit [中文文档](https://github.com/seajs/seajs-debug/issues/4)
