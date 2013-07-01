@@ -15,7 +15,8 @@ Install with spm:
 Usage
 -----
 
-1. Config alias:
+1. Set alias config first:
+
    ```js
    seajs.config({
      "alias": {
@@ -23,7 +24,7 @@ Usage
      }
    })
    ```
-2. Add `?seajs-debug` to page uri.
-3. You will see a float box.
+
+2. Add `?seajs-debug` to page uri and reload it, then You will see a float box.
 
 For more details please visit [中文文档](https://github.com/seajs/seajs-debug/issues/4)
