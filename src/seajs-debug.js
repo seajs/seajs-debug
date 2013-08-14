@@ -5,6 +5,130 @@
 
   var MAX_TRY = 100
   var pollCount = 0
+  var store = {}
+
+
+  // Simple Store: https://github.com/marcuswestin/store.js/blob/master/store.js
+  ~function(win, doc) {
+    var localStorageName = 'localStorage',
+      namespace = '__storejs__',
+      storage
+
+    store.disabled = false
+    store.set = function(key, value) {
+    }
+    store.get = function(key) {
+    }
+
+    // Different from store.js
+    function isString(val) {
+      return {}.toString.call(val) == "[object String]"
+    }
+    store.serialize = function(value) {
+      if (isString(value)) return value
+
+      var html = []
+      for(var key in value) {
+        var val = value[key]
+        if (isString(val)) {
+          val = val.replace(/'/g, '"').replace(/\n/g, '\\n').replace(/\r/g, '\\r')
+          val = "'" + val + "'"
+        }
+        html.push('' + key +':' + val)
+      }
+      return "{" + html.join(",") + "}"
+    }
+    store.deserialize = function(value) {
+      if (!isString(value)) return undefined
+      try {
+        return eval('(' + value + ')')
+      }
+      catch (e) {
+        return undefined
+      }
+    }
+    // end
+
+    function isLocalStorageNameSupported() {
+      try {
+        return (localStorageName in win && win[localStorageName])
+      }
+      catch (err) {
+        return false
+      }
+    }
+
+    if (isLocalStorageNameSupported()) {
+      storage = win[localStorageName]
+      store.set = function(key, val) {
+        if (val === undefined) {
+          return store.remove(key)
+        }
+        storage.setItem(key, store.serialize(val))
+        return val
+      }
+      store.get = function(key) {
+        return store.deserialize(storage.getItem(key))
+      }
+    } else if (doc.documentElement.addBehavior) {
+      var storageOwner,
+        storageContainer
+      try {
+        storageContainer = new ActiveXObject('htmlfile')
+        storageContainer.open()
+        storageContainer.write('<s' + 'cript>document.w=window</s' + 'cript><iframe src="/favicon.ico"></iframe>')
+        storageContainer.close()
+        storageOwner = storageContainer.w.frames[0].document
+        storage = storageOwner.createElement('div')
+      } catch (e) {
+        storage = doc.createElement('div')
+        storageOwner = doc.body
+      }
+      function withIEStorage(storeFunction) {
+        return function() {
+          var args = Array.prototype.slice.call(arguments, 0)
+          args.unshift(storage)
+          storageOwner.appendChild(storage)
+          storage.addBehavior('#default#userData')
+          storage.load(localStorageName)
+          var result = storeFunction.apply(store, args)
+          storageOwner.removeChild(storage)
+          return result
+        }
+      }
+
+      var forbiddenCharsRegex = new RegExp("[!\"#$%&'()*+,/\\\\:;<=>?@[\\]^`{|}~]", "g")
+
+      function ieKeyFix(key) {
+        return key.replace(forbiddenCharsRegex, '___')
+      }
+
+      store.set = withIEStorage(function(storage, key, val) {
+        key = ieKeyFix(key)
+        if (val === undefined) {
+          return store.remove(key)
+        }
+        storage.setAttribute(key, store.serialize(val))
+        storage.save(localStorageName)
+        return val
+      })
+      store.get = withIEStorage(function(storage, key) {
+        key = ieKeyFix(key)
+        return store.deserialize(storage.getAttribute(key))
+      })
+    }
+
+    try {
+      store.set(namespace, namespace)
+      if (store.get(namespace) != namespace) {
+        store.disabled = true
+      }
+      store.remove(namespace)
+    } catch (e) {
+      store.disabled = true
+    }
+    global.storage = storage
+  }(global, document)
 
   var config = {
     // Force debug when execute debug plugin
@@ -23,63 +147,79 @@
     custom: ""
   }
 
-  // todo: Load local config and merge
+  // Load local config and merge
+  var _config = store.get("seajs-debug-config")
+
+  if (_config) {
+    for (var key in _config) {
+      if (_config.hasOwnProperty(key)) {
+        config[key] = _config[key]
+      }
+    }
+  }
 
   // Setting seajs.config according config
   seajs.config({
     debug: config.debug
   })
-  doc.title = "[Sea.js Debug Mode] - " + doc.title
 
-  // Show console window
-  if (config.console) {
-    showConsole()
-  }
+  if (config.debug) {
+    doc.title = "[Sea.js Debug Mode] - " + doc.title
+    // Show console window
+    if (config.console) {
+      showConsole()
+    }
 
-  // Add debug file mapping
-  if (config.source) {
-    seajs.config({
-      map: [
-        [ '.js', '-debug.js' ],
-        [ '.css', '-debug.css' ]
-      ]
-    })
-  }
+    // Add debug file mapping
+    if (config.source) {
+      seajs.config({
+        map: [
+          [ '.js', '-debug.js' ],
+          [ '.css', '-debug.css' ]
+        ]
+      })
+    }
 
-  // Add timestamp to load file from server, not from browser cache
-  // See: https://github.com/seajs/seajs/issues/264#issuecomment-20719662
-  if (config.nocache) {
-    var TIME_STAMP = '?t=' + new Date().getTime()
+    // Add timestamp to load file from server, not from browser cache
+    // See: https://github.com/seajs/seajs/issues/264#issuecomment-20719662
+    if (config.nocache) {
+      var TIME_STAMP = '?t=' + new Date().getTime()
 
-    seajs.on('fetch', function(data) {
-      if (data.uri) {
-        data.requestUri = data.uri + TIME_STAMP
+      seajs.on('fetch', function(data) {
+        if (data.uri) {
+          data.requestUri = data.uri + TIME_STAMP
+        }
+      })
+
+      seajs.on('define', function(data) {
+        if (data.uri) {
+          data.uri = data.uri.replace(TIME_STAMP, '')
+        }
+      })
+    }
+
+    // Excludes all url temporarily
+    if (config.combo) {
+      seajs.config({
+        comboExcludes: /.*/
+      })
+    }
+
+    // load log plugin
+    if (config.log) {
+      seajs.config({
+        preload: [seajs.data.base + "seajs/seajs-log/1.0.0/seajs-log.js"] // http://assets.spmjs.org/
+      })
+    }
+
+    if (config.custom) {
+      _config = {}
+      try {
+        _config = (new Function("return " + config.custom))()
+      } catch (e) {
       }
-    })
-
-    seajs.on('define', function(data) {
-      if (data.uri) {
-        data.uri = data.uri.replace(TIME_STAMP, '')
-      }
-    })
-  }
-
-  // Excludes all url temporarily
-  if (config.combo) {
-    seajs.config({
-      comboExcludes: /.*/
-    })
-  }
-
-  // load log plugin
-  if (config.log) {
-    seajs.config({
-      preload: [seajs.data.base + "seajs/seajs-log/1.0.0/seajs-log.js"] // http://assets.spmjs.org/
-    })
-  }
-
-  // todo: execute custom config
-  if (config.custom) {
+      seajs.config(_config)
+    }
 
   }
 
@@ -181,34 +321,15 @@
         (function(button, i) {
           button.onclick = function() {
             var cbk = buttonInfo[i][1]
-            cbk && cbk();
-            saveConfig(config)
+            cbk && cbk()
+            // Save config
+            store.set("seajs-debug-config", config)
 
             buttonInfo[i][2] ? loc.replace(loc.href.replace("seajs-debug", "")) : loc.reload()
           }
         })(buttons[i], i);
       }
     })
-  }
-
-  function getConfig() {
-    var cookie = "", m
-
-    if ((m = doc.cookie.match(
-      /(?:^| )seajs-debug(?:(?:=([^;]*))|;|$)/))) {
-      cookie = m[1] ? decodeURIComponent(m[1]) : ""
-    }
-
-    var parts = cookie.split("`")
-    return {
-      debug: Number(parts[0]) || 0,
-      configFile: parts[1] || "",
-      console: Number(parts[2]) || 0
-    }
-  }
-
-  function saveConfig(o) {
-    // todo
   }
 
   function appendToBody(div, callback) {
@@ -245,4 +366,3 @@
   define("seajs-debug", [], {})
 
 })(seajs, this, document, location);
-
