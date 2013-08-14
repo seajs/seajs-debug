@@ -41,7 +41,7 @@
     store.deserialize = function(value) {
       if (!isString(value)) return undefined
       try {
-        return eval('(' + value + ')')
+        return (new Function("return " + value))()
       }
       catch (e) {
         return undefined
