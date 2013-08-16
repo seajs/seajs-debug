@@ -38,7 +38,10 @@
         else if (val.hasOwnProperty("length")) {
           var tmp = []
           for (var i = 0; i < val.length; i++) {
-            tmp.push('["' + val[i][0] + '","' + val[i][1] + '"]')
+            var f = trim(val[i][0])
+            var t = trim(val[i][1])
+
+            f.length && t.length && tmp.push('["' + f + '","' + t + '"]')
           }
           val = '[' + tmp.join(',') + ']'
         }
