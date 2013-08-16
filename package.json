@@ -11,8 +11,5 @@
   "repository": {
     "type": "git",
     "url": "git://github.com/seajs/seajs-debug.git"
-  },
-  "spm": {
-    "output": ["seajs-debug.js"]
   }
 }

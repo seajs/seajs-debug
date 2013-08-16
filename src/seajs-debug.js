@@ -135,7 +135,6 @@
     } catch (e) {
       store.disabled = true
     }
-    global.storage = storage // todo: remove
   })(global, document)
 
   // Main config
