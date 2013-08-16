@@ -5,8 +5,14 @@
   "description": "A Sea.js plugin for debugging freely",
   "keywords": ["seajs", "plugin", "debug"],
   "author": "Frank Wang <lifesinger@gmail.com>",
+  "maintainers": [
+    "乔花 <shengyan1985@gmail.com>"
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/seajs/seajs-debug.git"
+  },
+  "spm": {
+    "output": ["seajs-debug.js"]
   }
 }

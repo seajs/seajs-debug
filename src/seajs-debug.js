@@ -181,8 +181,8 @@
 
     this.statusButtonInfo = [
       // [config 字段名, 开启时(true)的 title, 关闭时(false)的 title, icon, click fn callback]
-      ["source", "Switch to min file", "Switch to source file", "&#xe802;"],
-      ["combo", "Combo url", "Untie combo url", "&#xe801;"],
+      ["source", "Switch to min files", "Switch to source files", "&#xe802;"],
+      ["combo", "Enable combo", "Disable combo", "&#xe801;"],
       ["nocache", "Enable cache", "Disable cache", "&#xe800;"],
       ["log", "Hide seajs log", "Show seajs log", "&#xe805;"],
       ["mode", "Switch mapping mode", "Switch editor mode", "&#xe807;", function(status) {
