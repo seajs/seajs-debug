@@ -19,9 +19,9 @@ Usage
 
   ```js
   seajs.config({
-    "alias": {
-      "seajs-debug": "path/to/seajs-debug"
-    }
+      "alias": {
+        "seajs-debug": "path/to/seajs-debug"
+      }
   })
   ```
 
