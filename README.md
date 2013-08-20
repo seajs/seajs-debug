@@ -17,13 +17,13 @@ Usage
 
 1. Set alias config first:
 
-   ```js
-   seajs.config({
-     "alias": {
-       "seajs-debug": "path/to/seajs-debug"
-     }
-   })
-   ```
+  ```js
+  seajs.config({
+      "alias": {
+        "seajs-debug": "path/to/seajs-debug"
+      }
+  })
+  ```
 
 2. Add `?seajs-debug` to page uri and reload it, then You will see a float box.
 
