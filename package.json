@@ -11,5 +11,16 @@
   "repository": {
     "type": "git",
     "url": "git://github.com/seajs/seajs-debug.git"
+  },
+  "spm": {
+    "output": [
+      "seajs-debug.js",
+      "seajs-debug-panel.css",
+      "seajs-health.js",
+
+      "font/fontello.eot",
+      "font/fontello.svg",
+      "font/fontello.ttf",
+      "font/fontello.woff"]
   }
 }

@@ -1,0 +1,244 @@
+@font-face {
+    font-family: 'fontello';
+    src: url('./font/fontello.eot?20130821');
+    src: url('./font/fontello.eot?20130821#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('./font/fontello.woff?20130821') format('woff'),  /* chrome 6+、firefox 3.6+、Safari5.1+、Opera 11+ */ url('./font/fontello.ttf?20130821') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+ */ url('./font/fontello.svg?20130821#fontello') format('svg'); /* iOS 4.1- */
+    font-weight: normal;
+    font-style: normal;
+}
+
+#seajs-debug-console #seajs-debug-status button,
+#seajs-debug-console #seajs-debug-meta button,
+#seajs-debug-console #seajs-debug-map button {
+    font-family: "fontello";
+}
+
+
+#seajs-debug-console, #seajs-debug-console * {
+    margin: 0;
+    padding: 0;
+    border: none;
+    font: 14px/1.2 Arial
+}
+
+#seajs-debug-console {
+    position: fixed;
+    width: 520px;
+
+    right: 10px;
+    bottom: 10px;
+    border: 2px solid #463265;
+
+    z-index: 2147483647;
+    background: #fafafa;
+}
+
+#seajs-debug-console a, #seajs-debug-console a:hover, #seajs-debug-console a:active, #seajs-debug-console a:link {
+    text-decoration: none;
+}
+
+#seajs-debug-console button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+#seajs-debug-console #seajs-debug-header,
+#seajs-debug-console #seajs-debug-editor,
+#seajs-debug-console #seajs-debug-map,
+#seajs-debug-console #seajs-debug-health {
+    border: none;
+    border-bottom: 1px solid lightgrey;
+}
+
+#seajs-debug-console #seajs-debug-header {
+    margin: 0;
+    padding: 5px 5px 5px 10px;
+    height: 20px;
+    line-height: 20px;
+    font-weight: bold;
+    font-size: 16px;
+    background: #563d7c;
+    color: #cdbfe3;
+}
+
+#seajs-debug-console #seajs-debug-editor,
+#seajs-debug-console #seajs-debug-map,
+#seajs-debug-console #seajs-debug-health {
+    min-height: 100px;
+    _height: 100px;
+    background: #FFF;
+}
+#seajs-debug-console #seajs-debug-editor,
+#seajs-debug-console #seajs-debug-map p input {
+    font-family: Courier, monospace;
+    color: #666;
+}
+#seajs-debug-console #seajs-debug-editor {
+    display: block;
+    width: 510px;
+    padding: 5px;
+
+    resize: vertical;
+}
+
+#seajs-debug-console #seajs-debug-map {
+    padding: 5px 0;
+}
+
+#seajs-debug-console #seajs-debug-map p {
+    height: 30px;
+    line-height: 30px;
+    overflow: hidden;
+    padding-left: 10px;
+}
+
+#seajs-debug-console #seajs-debug-map p input {
+    padding-left: 6px;
+    height: 24px;
+    line-height: 24px;
+    border: 1px solid #dcdcdc;
+    width: 200px;
+    vertical-align: middle;
+    *vertical-align: bottom;
+}
+#seajs-debug-console #seajs-debug-map .seajs-debug-hit input {
+    border-color: #cdbfe3;
+    background-color: #F6F0FF;
+}
+#seajs-debug-console #seajs-debug-map button {
+    color: #999;
+}
+
+#seajs-debug-console #seajs-debug-map button,
+#seajs-debug-console #seajs-debug-meta button {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+}
+
+#seajs-debug-console #seajs-debug-status {
+    height: 35px;
+}
+
+#seajs-debug-console #seajs-debug-status span {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    height: 35px;
+    line-height: 35px;
+    padding-left: 8px;
+    color: #AAA;
+    vertical-align: middle;
+}
+
+#seajs-debug-console #seajs-debug-status button {
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    color: #999;
+    border: none;
+    font-size: 16px;
+    vertical-align: middle;
+    _vertical-align: top;
+}
+
+#seajs-debug-console #seajs-debug-status button:hover,
+#seajs-debug-console #seajs-debug-status button.seajs-debug-status-on:hover {
+    background-color: #f0f0f0;
+    color: #000;
+}
+
+#seajs-debug-console #seajs-debug-status button:active,
+#seajs-debug-console #seajs-debug-status button.seajs-debug-status-on {
+    color: #563d7c;
+    text-shadow: 0 0 6px #cdbfe3;
+    background-color: #f0f0f0;
+}
+
+#seajs-debug-console #seajs-debug-action {
+    float: right;
+    margin-top: -31px;
+    *margin-top: -32px;
+    margin-right: 2px;
+}
+
+#seajs-debug-console #seajs-debug-action button {
+    position: relative;
+    z-index: 2;
+    width: 60px;
+    height: 28px;
+    border-radius: 2px;
+    text-align: center;
+    color: #333;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    text-transform: uppercase;
+    *margin-left: 4px;
+}
+
+#seajs-debug-console #seajs-debug-action button:hover,
+#seajs-debug-console #seajs-debug-action button:focus,
+#seajs-debug-console #seajs-debug-action button:hover,
+#seajs-debug-console #seajs-debug-action button:active {
+  background-color: #ebebeb;
+  border-color: #adadad;
+}
+
+#seajs-debug-console #seajs-debug-action button:active {
+    position: relative;
+    top: 1px;
+    -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    -moz-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+
+#seajs-debug-console #seajs-debug-meta {
+    position: absolute;
+    right: 0;
+    top: 0;
+
+}
+
+#seajs-debug-console #seajs-debug-meta button {
+    background: #463265;
+    color: white;
+}
+
+#seajs-debug-console #seajs-debug-health {
+    height: 500px;
+
+    /* loading */
+}
+
+/*
+-webkit-animation: spin 2s infinite linear;
+-moz-animation: spin 2s infinite linear;
+-o-animation: spin 2s infinite linear;
+-ms-animation: spin 2s infinite linear;
+animation: spin 2s infinite linear;
+
+*/
+#seajs-debug-console.seajs-debug-mini {
+    width: 30px;
+    height: 30px;
+    border: none;
+}
+
+
+
+/* ie6 */
+#seajs-debug-console {
+    _position: absolute;
+    _top: expression(documentElement.scrollTop+documentElement.clientHeight-this.clientHeight-5);
+}
+
+* html {
+    _background: url(null) no-repeat fixed;
+}
