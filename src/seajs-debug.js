@@ -55,13 +55,15 @@ define(function(require, exports, module) {
       seajs.on('fetch', function(data) {
         if (data.uri) {
           // use data.requestUri not data.uri to avoid combo & timestamp conflict
-          data.requestUri = data.requestUri + TIME_STAMP
+          // avoid too long url
+          data.requestUri = (data.requestUri + TIME_STAMP).slice(0, 2000)
         }
       })
 
       seajs.on('define', function(data) {
         if (data.uri) {
-          data.uri = data.uri.replace(TIME_STAMP, '')
+          // remove like ?t=12312 or ?
+          data.uri = data.uri.replace(/\?t*=*\d*$/g, '')
         }
       })
     }
