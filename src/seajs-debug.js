@@ -72,12 +72,12 @@ define(function(require, exports, module) {
 
     // Load log plugin
     config.log && seajs.config({
-      preload: [seajs.data.base + "seajs/seajs-log/1.0.0/seajs-log.js"] // http://assets.spmjs.org/
+      preload: 'seajs-log' // http://assets.spmjs.org/
     })
 
     // Load health plugin
     config.health && seajs.config({
-      preload: [seajs.data.base + 'seajs/seajs-health/0.1.0/seajs-health.js']
+      preload: 'seajs-health'
     })
 
     // Execute custom config
