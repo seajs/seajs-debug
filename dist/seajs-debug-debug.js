@@ -38,12 +38,15 @@ define("seajs/seajs-debug/1.0.1/seajs-debug-debug", [ "./seajs-debug-panel-debug
             var TIME_STAMP = "?t=" + new Date().getTime();
             seajs.on("fetch", function(data) {
                 if (data.uri) {
-                    data.requestUri = data.uri + TIME_STAMP;
+                    // use data.requestUri not data.uri to avoid combo & timestamp conflict
+                    // avoid too long url
+                    data.requestUri = (data.requestUri + TIME_STAMP).slice(0, 2e3);
                 }
             });
             seajs.on("define", function(data) {
                 if (data.uri) {
-                    data.uri = data.uri.replace(TIME_STAMP, "");
+                    // remove like ?t=12312 or ?
+                    data.uri = data.uri.replace(/\?t*=*\d*$/g, "");
                 }
             });
         }
@@ -53,11 +56,11 @@ define("seajs/seajs-debug/1.0.1/seajs-debug-debug", [ "./seajs-debug-panel-debug
         });
         // Load log plugin
         config.log && seajs.config({
-            preload: [ seajs.data.base + "seajs/seajs-log/1.0.0/seajs-log.js" ]
+            preload: "seajs-log"
         });
         // Load health plugin
         config.health && seajs.config({
-            preload: [ seajs.data.base + "seajs/seajs-health/0.1.0/seajs-health.js" ]
+            preload: "seajs-health"
         });
         // Execute custom config
         if (config.custom) {
