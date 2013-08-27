@@ -54,7 +54,8 @@ define(function(require, exports, module) {
 
       seajs.on('fetch', function(data) {
         if (data.uri) {
-          data.requestUri = data.uri + TIME_STAMP
+          // use data.requestUri not data.uri to avoid combo & timestamp conflict
+          data.requestUri = data.requestUri + TIME_STAMP
         }
       })
 
