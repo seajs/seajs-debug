@@ -15,7 +15,6 @@
   "spm": {
     "output": [
       "seajs-debug.js",
-      "seajs-health.js",
 
       "font/fontello.eot",
       "font/fontello.svg",
