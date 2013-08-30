@@ -15,7 +15,7 @@ define(function(require, exports, module) {
   var MIN_CLS = PREFIX + 'mini'
   var HIT_CLS = PREFIX + 'hit'
 
-  require.async('./seajs-debug-panel.css')
+  require('./seajs-debug-panel.css')
 
   function DebugPanel() {
     this.element = null
