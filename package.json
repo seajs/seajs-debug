@@ -12,6 +12,9 @@
     "type": "git",
     "url": "git://github.com/seajs/seajs-debug.git"
   },
+  "devDependencies": {
+    "seatools": "*"
+  },
   "spm": {
     "output": ["seajs-debug.js"]
   }
