@@ -1,7 +1,7 @@
 @font-face {
     font-family: 'fontello';
-    src: url('./font/fontello.eot?20130821');
-    src: url('./font/fontello.eot?20130821#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('./font/fontello.woff?20130821') format('woff'),  /* chrome 6+、firefox 3.6+、Safari5.1+、Opera 11+ */ url('./font/fontello.ttf?20130821') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+ */ url('./font/fontello.svg?20130821#fontello') format('svg'); /* iOS 4.1- */
+    src: url('https://i.alipayobjects.com/common/fonts/seajs-debug/fontello.eot');
+    src: url('https://i.alipayobjects.com/common/fonts/seajs-debug/fontello.eot#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('https://i.alipayobjects.com/common/fonts/seajs-debug/fontello.woff') format('woff'),  /* chrome 6+、firefox 3.6+、Safari5.1+、Opera 11+ */ url('https://i.alipayobjects.com/common/fonts/seajs-debug/fontello.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+ */ url('https://i.alipayobjects.com/common/fonts/seajs-debug/fontello.svg') format('svg'); /* iOS 4.1- */
     font-weight: normal;
     font-style: normal;
 }
