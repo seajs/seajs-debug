@@ -28,17 +28,6 @@ seajs/seajs-style/1.0.0/seajs-style.js"></script>
 -->
 <!--<script src="/dist/seajs-debug-debug.js"></script>-->
 <script>
-    /*seajs.config({
-        map: [
-            function(uri) {
-                // Add debug file mapping
-                if (!/\-debug\.(js|css)+/g.test(uri) && !/\/seajs\-debug/g.test(uri)) {
-                    uri = uri.replace(/\/(.*)\.(js|css)/g, "/$1-debug.$2")
-                }
-                return uri
-            }
-        ]
-    })*/
 seajs.config({
     preload: ['seajs/seajs-debug/1.0.1/seajs-debug'],
     alias: {
