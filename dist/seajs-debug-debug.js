@@ -166,11 +166,6 @@ define("seajs/seajs-debug/1.0.1/seajs-debug-panel-debug", [ "seajs/seajs-debug/1
         this.statusInfo = [ // [config 字段名, 开启时(true)的 title, 关闭时(false)的 title, icon, click fn callback]
         [ "source", "Switch to min files", "Switch to source files", "&#xe80b;" ], [ "combo", "Enable combo", "Disable combo", "&#xe801;" ], [ "nocache", "Enable cache", "Disable cache", "&#xe806;" ], [ "log", "Hide seajs log", "Show seajs log", "&#xe809;" ], [ "mode", "Switch mapping mode", "Switch editor mode", "&#xe808;", function(status) {
             this.show();
-        } ], [ "health", "Go back", "Show CMD modules' relations", "&#xe807;", function(status) {
-            this.show();
-            if (status) {
-                require.async(seajs.data.base + "seajs/seajs-health/0.1.0/seajs-health.js");
-            }
         } ] ];
         var tmpHTML = "";
         for (var i = 0; i < this.statusInfo.length; i++) {
@@ -389,7 +384,7 @@ define("seajs/seajs-debug/1.0.1/seajs-debug-panel-debug", [ "seajs/seajs-debug/1
     module.exports = debugPanel;
     // Helpers
     function validateURL(textval) {
-        var urlregex = new RegExp("^(http|https|ftp|file)://([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&amp;%$-]+)*@)*((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]).(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0).(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0).(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|([a-zA-Z0-9-]+.)*[a-zA-Z0-9-]+.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(:[0-9]+)*(/($|[a-zA-Z0-9.,?'\\+&amp;%$#=~_-]+))*$");
+        var urlregex = new RegExp("^(http|https|ftp)://([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&amp;%$-]+)*@)*((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]).(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0).(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0).(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|([a-zA-Z0-9-]+.)*[a-zA-Z0-9-]+.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(:[0-9]+)*(/($|[a-zA-Z0-9.,?'\\+&amp;%$#=~_-]+))*$");
         return urlregex.test(textval);
     }
     function addEvent(el, type, fn, capture) {
