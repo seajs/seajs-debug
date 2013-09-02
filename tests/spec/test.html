@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>test</title>
+</head>
+<body>
+<script src="http://assets.spmjs.org/seajs/seajs/2.1.1/sea.js"></script>
+<div id="out"></div>
+<script>
+  seajs.config({
+    alias: {
+      'seajs-debug': '../../src/seajs-debug'
+    },
+    preload: ['../../src/seajs-debug']
+  })
+  seajs.use('./main')
+</script>
+
+
+</body>
+</html>

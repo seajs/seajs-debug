@@ -1,37 +1,97 @@
 /**
  * The Sea.js plugin for debugging freely
  */
-(function(seajs, global, doc, loc) {
+define(function(require, exports, module) {
+  var doc = document,
+    loc = location
 
-  var MAX_TRY = 100
-  var pollCount = 0
-  var config = getConfig()
+  var debugPanel = require('./seajs-debug-panel'),
+    config = debugPanel.config
 
-  // Force debug to true when url contains `?seajs-debug`
+  // if querystring has seajs-debug, force debug: true
   if (loc.search.indexOf("seajs-debug") > -1) {
-    config.debug = 1
-    config.console = 1
-    saveConfig(config)
+    config.debug = true
   }
 
-  // Set debug config
+  // Setting seajs.config according config
+  seajs.config({
+    debug: config.debug
+  })
+
   if (config.debug) {
-    seajs.config({
-      debug: true
-    })
-  }
+    // Show console window
+    debugPanel.render(['map', 'editor', 'health', 'status', 'action'])
 
-  // Load the config file
-  if (config.configFile) {
     doc.title = "[Sea.js Debug Mode] - " + doc.title
-    seajs.config({
-      preload: config.configFile
-    })
-  }
 
-  // Show console window
-  if (config.console) {
-    showConsole(config.configFile)
+    seajs.config({
+      map: [
+        function(uri) {
+          // Load map
+          var oldUri = uri
+
+          for (var i = 0; i < config.mapping.length; i++) {
+            if (!config.mapping[i][0].length || !config.mapping[i][1]) continue
+
+            uri = uri.replace(config.mapping[i][0], config.mapping[i][1])
+
+            debugPanel.setHitInput(i, uri !== oldUri)
+          }
+
+          // Add debug file mapping
+          if (config.source && !/\-debug\.(js|css)+/g.test(uri) && !/\/seajs\-debug/g.test(uri)) {
+            uri = uri.replace(/\/(.*)\.(js|css)/g, "/$1-debug.$2")
+          }
+          return uri
+        }
+      ]
+    })
+
+    // Add timestamp to load file from server, not from browser cache
+    // See: https://github.com/seajs/seajs/issues/264#issuecomment-20719662
+    if (config.nocache) {
+      var TIME_STAMP = '?t=' + new Date().getTime()
+
+      seajs.on('fetch', function(data) {
+        if (data.uri) {
+          // use data.requestUri not data.uri to avoid combo & timestamp conflict
+          // avoid too long url
+          data.requestUri = (data.requestUri + TIME_STAMP).slice(0, 2000)
+        }
+      })
+
+      seajs.on('define', function(data) {
+        if (data.uri) {
+          // remove like ?t=12312 or ?
+          data.uri = data.uri.replace(/\?t*=*\d*$/g, '')
+        }
+      })
+    }
+
+    // Excludes all url temporarily
+    config.combo && seajs.config({
+      comboExcludes: /.*/
+    })
+
+    // Load log plugin
+    config.log && seajs.config({
+      preload: 'seajs-log' // http://assets.spmjs.org/
+    })
+
+    // Load health plugin
+    config.health && seajs.config({
+      preload: 'seajs-health'
+    })
+
+    // Execute custom config
+    if (config.custom) {
+      var _config = {}
+      try {
+        _config = (new Function("return " + config.custom))()
+      } catch (e) {
+      }
+      seajs.config(_config)
+    }
   }
 
   // Add find method to seajs in debug mode
@@ -41,11 +101,12 @@
     seajs.find = function(selector) {
       var matches = []
 
-      for(var uri in cachedModules) {
+      for (var uri in cachedModules) {
         if (cachedModules.hasOwnProperty(uri)) {
           if (typeof selector === "string" && uri.indexOf(selector) > -1 ||
-              selector instanceof RegExp && selector.test(uri)) {
+            selector instanceof RegExp && selector.test(uri)) {
             var mod = cachedModules[uri]
+
             mod.exports && matches.push(mod.exports)
           }
         }
@@ -54,138 +115,4 @@
       return matches
     }
   }
-
-
-  // Helpers
-
-  function showConsole(configFile) {
-    var style =
-        "#seajs-debug-console { " +
-        "  position: fixed; bottom: 10px; " +
-        "  *position: absolute; *top: 10px; *width: 465px; " +
-        "  right: 10px; z-index: 999999999;" +
-        "  background: #fff; color: #000; font: 12px arial;" +
-        "  border: 2px solid #000; padding: 0 10px 10px;" +
-        "}" +
-        "#seajs-debug-console h3 {" +
-        "  margin: 3px 0 6px -6px; padding: 0;" +
-        "  font-weight: bold; font-size: 14px;" +
-        "}" +
-        "#seajs-debug-console input {" +
-        "  width: 400px; margin-left: 10px;" +
-        "}" +
-        "#seajs-debug-console button {" +
-        "  float: right; margin: 6px 0 0 10px;" +
-        "  box-shadow: #ddd 0 1px 2px;" +
-        "  font-size: 14px; padding: 4px 10px;" +
-        "  color: #211922; background: #f9f9f9;" +
-        "  text-shadow: 0 1px #eaeaea;" +
-        "  border: 1px solid #bbb; border-radius: 3px;" +
-        "  cursor: pointer; opacity: .8" +
-        "}" +
-        "#seajs-debug-console button:hover {" +
-        "  background: #e8e8e8; text-shadow: none; opacity: 1" +
-        "}" +
-        "#seajs-debug-console a {" +
-        "  position: relative; top: 10px; text-decoration: none;" +
-        "}"
-
-    var html =
-        "<div id=\"seajs-debug-console\">" +
-        "  <h3>Sea.js Debug Console</h3>" +
-        "  <label>Config File: <input value=\"" + configFile + "\"/></label><br/>" +
-        "  <button>Exit</button>" +
-        "  <button>Hide</button>" +
-        "  <button>Save</button>" +
-        "</div>"
-
-    var div = doc.createElement("div")
-    div.innerHTML = html
-
-    importStyle(style)
-    appendToBody(div)
-
-    var buttons = div.getElementsByTagName("button")
-
-    // save
-    buttons[2].onclick = function() {
-      var href = div.getElementsByTagName("input")[0].value || ""
-      config.configFile = href
-      saveConfig(config)
-      loc.reload()
-    }
-
-    // hide
-    buttons[1].onclick = function() {
-      config.console = 0
-      saveConfig(config)
-      loc.replace(loc.href.replace("seajs-debug", ""))
-    }
-
-    // exit
-    buttons[0].onclick = function() {
-      config.debug = 0
-      saveConfig(config)
-      loc.replace(loc.href.replace("seajs-debug", ""))
-    }
-  }
-
-  function getConfig() {
-    var cookie = "", m
-
-    if ((m = doc.cookie.match(
-        /(?:^| )seajs-debug(?:(?:=([^;]*))|;|$)/))) {
-      cookie = m[1] ? decodeURIComponent(m[1]) : ""
-    }
-
-    var parts = cookie.split("`")
-    return {
-      debug: Number(parts[0]) || 0,
-      configFile: parts[1] || "",
-      console: Number(parts[2]) || 0
-    }
-  }
-
-  function saveConfig(o) {
-    var date = new Date()
-    date.setTime(date.getTime() + 30 * 86400000) // 30 days
-
-    doc.cookie = "seajs-debug=" + o.debug + "`" + o.configFile + "`" +
-        o.console + "; path=/; expires=" + date.toUTCString()
-  }
-
-  function appendToBody(div) {
-    pollCount++
-
-    if (doc.body) {
-      doc.body.appendChild(div)
-    }
-    else if (pollCount < MAX_TRY) {
-      setTimeout(function() {
-        appendToBody(div)
-      }, 200)
-    }
-  }
-
-  function importStyle(cssText) {
-    var element = doc.createElement("style")
-
-    // Add to DOM first to avoid the css hack invalid
-    doc.getElementsByTagName("head")[0].appendChild(element)
-
-    // IE
-    if (element.styleSheet) {
-      element.styleSheet.cssText = cssText
-    }
-    // W3C
-    else {
-      element.appendChild(doc.createTextNode(cssText))
-    }
-  }
-
-
-  // Register as module
-  define("seajs-debug", [], {})
-
-})(seajs, this, document, location);
-
+})
