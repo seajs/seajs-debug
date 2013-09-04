@@ -26,7 +26,7 @@ define("seajs/seajs-debug/1.1.0/seajs-debug-debug", [ "./seajs-debug-panel-debug
                     debugPanel.setHitInput(i, uri !== oldUri);
                 }
                 // Add debug file mapping
-                if (config.source && !/\-debug\.(js|css)+/g.test(uri) && !/\/seajs\-debug/g.test(uri)) {
+                if (config.source && !/\-debug\.(js|css)+/g.test(uri)) {
                     uri = uri.replace(/\/(.*)\.(js|css)/g, "/$1-debug.$2");
                 }
                 return uri;

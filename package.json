@@ -12,6 +12,9 @@
     "type": "git",
     "url": "git://github.com/seajs/seajs-debug.git"
   },
+  "bugs": {
+    "url": "https://github.com/seajs/seajs-debug/issues"
+  },
   "devDependencies": {
     "seatools": "*"
   },

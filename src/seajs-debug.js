@@ -39,7 +39,7 @@ define(function(require, exports, module) {
           }
 
           // Add debug file mapping
-          if (config.source && !/\-debug\.(js|css)+/g.test(uri) && !/\/seajs\-debug/g.test(uri)) {
+          if (config.source && !/\-debug\.(js|css)+/g.test(uri)) {
             uri = uri.replace(/\/(.*)\.(js|css)/g, "/$1-debug.$2")
           }
           return uri
