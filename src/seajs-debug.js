@@ -56,7 +56,7 @@ define(function(require, exports, module) {
         if (data.uri) {
           // use data.requestUri not data.uri to avoid combo & timestamp conflict
           // avoid too long url
-          data.requestUri = (data.requestUri + TIME_STAMP).slice(0, 2000)
+          data.requestUri = ((data.requestUri || data.uri) + TIME_STAMP).slice(0, 2000)
         }
       })
 
