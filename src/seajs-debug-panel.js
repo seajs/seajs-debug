@@ -117,13 +117,13 @@ define(function(require, exports, module) {
       ["log", "Hide seajs log", "Show seajs log", "&#xe809;"],
       ["mode", "Switch mapping mode", "Switch editor mode", "&#xe808;", function(status) {
         this.show()
-      }],
+      }]/*,
       ["health", "Go back", "Show CMD modules' relations", "&#xe807;", function(status) {
         this.show()
         if (status) {
           require.async(seajs.data.base + 'seajs/seajs-health/0.1.0/seajs-health.js')
         }
-      }]
+      }]*/
     ]
 
     var tmpHTML = ''

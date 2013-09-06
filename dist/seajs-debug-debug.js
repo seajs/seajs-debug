@@ -1,7 +1,7 @@
 /**
  * The Sea.js plugin for debugging freely
  */
-define("seajs/seajs-debug/1.0.1/seajs-debug-debug", [ "./seajs-debug-panel-debug", "./seajs-debug-store-debug", "./seajs-debug-config-debug", "./seajs-debug-panel-debug.css" ], function(require, exports, module) {
+define("seajs/seajs-debug/1.1.0/seajs-debug-debug", [ "./seajs-debug-panel-debug", "./seajs-debug-store-debug", "./seajs-debug-config-debug", "./seajs-debug-panel-debug.css" ], function(require, exports, module) {
     var doc = document, loc = location;
     var debugPanel = require("./seajs-debug-panel-debug"), config = debugPanel.config;
     // if querystring has seajs-debug, force debug: true
@@ -26,7 +26,7 @@ define("seajs/seajs-debug/1.0.1/seajs-debug-debug", [ "./seajs-debug-panel-debug
                     debugPanel.setHitInput(i, uri !== oldUri);
                 }
                 // Add debug file mapping
-                if (config.source && !/\-debug\.(js|css)+/g.test(uri) && !/\/seajs\-debug/g.test(uri)) {
+                if (config.source && !/\-debug\.(js|css)+/g.test(uri)) {
                     uri = uri.replace(/\/(.*)\.(js|css)/g, "/$1-debug.$2");
                 }
                 return uri;
@@ -40,7 +40,7 @@ define("seajs/seajs-debug/1.0.1/seajs-debug-debug", [ "./seajs-debug-panel-debug
                 if (data.uri) {
                     // use data.requestUri not data.uri to avoid combo & timestamp conflict
                     // avoid too long url
-                    data.requestUri = (data.requestUri + TIME_STAMP).slice(0, 2e3);
+                    data.requestUri = ((data.requestUri || data.uri) + TIME_STAMP).slice(0, 2e3);
                 }
             });
             seajs.on("define", function(data) {
@@ -90,17 +90,17 @@ define("seajs/seajs-debug/1.0.1/seajs-debug-debug", [ "./seajs-debug-panel-debug
 });
 
 // Debug Panel Object
-define("seajs/seajs-debug/1.0.1/seajs-debug-panel-debug", [ "seajs/seajs-debug/1.0.1/seajs-debug-store-debug", "seajs/seajs-debug/1.0.1/seajs-debug-config-debug" ], function(require, exports, module) {
+define("seajs/seajs-debug/1.1.0/seajs-debug-panel-debug", [ "seajs/seajs-debug/1.1.0/seajs-debug-store-debug", "seajs/seajs-debug/1.1.0/seajs-debug-config-debug" ], function(require, exports, module) {
     var doc = document, loc = location, global = this;
-    var store = require("seajs/seajs-debug/1.0.1/seajs-debug-store-debug");
-    var config = require("seajs/seajs-debug/1.0.1/seajs-debug-config-debug");
+    var store = require("seajs/seajs-debug/1.1.0/seajs-debug-store-debug");
+    var config = require("seajs/seajs-debug/1.1.0/seajs-debug-config-debug");
     var MAX_TRY = 100;
     var pollCount = 0;
     var PREFIX = "seajs-debug-";
     var STATUS_BUTTON_ON_CLS = PREFIX + "status-on";
     var MIN_CLS = PREFIX + "mini";
     var HIT_CLS = PREFIX + "hit";
-    require("seajs/seajs-debug/1.0.1/seajs-debug-panel-debug.css");
+    require("seajs/seajs-debug/1.1.0/seajs-debug-panel-debug.css");
     function DebugPanel() {
         this.element = null;
         this._rendered = false;
@@ -166,11 +166,6 @@ define("seajs/seajs-debug/1.0.1/seajs-debug-panel-debug", [ "seajs/seajs-debug/1
         this.statusInfo = [ // [config 字段名, 开启时(true)的 title, 关闭时(false)的 title, icon, click fn callback]
         [ "source", "Switch to min files", "Switch to source files", "&#xe80b;" ], [ "combo", "Enable combo", "Disable combo", "&#xe801;" ], [ "nocache", "Enable cache", "Disable cache", "&#xe806;" ], [ "log", "Hide seajs log", "Show seajs log", "&#xe809;" ], [ "mode", "Switch mapping mode", "Switch editor mode", "&#xe808;", function(status) {
             this.show();
-        } ], [ "health", "Go back", "Show CMD modules' relations", "&#xe807;", function(status) {
-            this.show();
-            if (status) {
-                require.async(seajs.data.base + "seajs/seajs-health/0.1.0/seajs-health.js");
-            }
         } ] ];
         var tmpHTML = "";
         for (var i = 0; i < this.statusInfo.length; i++) {
@@ -447,7 +442,7 @@ define("seajs/seajs-debug/1.0.1/seajs-debug-panel-debug", [ "seajs/seajs-debug/1
 
 // Localstorage object
 // Simple Store: https://github.com/marcuswestin/store.js/blob/master/store.js
-define("seajs/seajs-debug/1.0.1/seajs-debug-store-debug", [], function(require, exports, module) {
+define("seajs/seajs-debug/1.1.0/seajs-debug-store-debug", [], function(require, exports, module) {
     var doc = document, win = this;
     var store = {};
     var localStorageName = "localStorage", namespace = "__storejs__", storage;
@@ -580,8 +575,8 @@ define("seajs/seajs-debug/1.0.1/seajs-debug-store-debug", [], function(require, 
     }
 });
 
-define("seajs/seajs-debug/1.0.1/seajs-debug-config-debug", [ "seajs/seajs-debug/1.0.1/seajs-debug-store-debug" ], function(require, exports, module) {
-    var store = require("seajs/seajs-debug/1.0.1/seajs-debug-store-debug");
+define("seajs/seajs-debug/1.1.0/seajs-debug-config-debug", [ "seajs/seajs-debug/1.1.0/seajs-debug-store-debug" ], function(require, exports, module) {
+    var store = require("seajs/seajs-debug/1.1.0/seajs-debug-store-debug");
     // Main config
     var config = {
         // Force debug when execute debug plugin
@@ -613,8 +608,8 @@ define("seajs/seajs-debug/1.0.1/seajs-debug-config-debug", [ "seajs/seajs-debug/
     module.exports = config;
 });
 
-define("seajs/seajs-debug/1.0.1/seajs-debug-panel-debug.css", [], function() {
+define("seajs/seajs-debug/1.1.0/seajs-debug-panel-debug.css", [], function() {
     seajs.importStyle("@font-face{font-family:fontello;src:url(https://i.alipayobjects.com/common/fonts/seajs-debug/fontello.eot);src:url(https://i.alipayobjects.com/common/fonts/seajs-debug/fontello.eot#iefix) format('embedded-opentype'),url(https://i.alipayobjects.com/common/fonts/seajs-debug/fontello.woff) format('woff'),url(https://i.alipayobjects.com/common/fonts/seajs-debug/fontello.ttf) format('truetype'),url(https://i.alipayobjects.com/common/fonts/seajs-debug/fontello.svg) format('svg');font-weight:400;font-style:normal}#seajs-debug-console #seajs-debug-status button,#seajs-debug-console #seajs-debug-meta button,#seajs-debug-console #seajs-debug-map button{font-family:fontello}#seajs-debug-console,#seajs-debug-console *{margin:0;padding:0;border:0;font:14px/1.2 Arial}#seajs-debug-console{position:fixed;width:520px;right:10px;bottom:10px;border:2px solid #463265;z-index:2147483647;background:#fafafa}#seajs-debug-console a,#seajs-debug-console a:hover,#seajs-debug-console a:active,#seajs-debug-console a:link{text-decoration:none}#seajs-debug-console button{border:0;background:transparent;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;-o-user-select:none;user-select:none}#seajs-debug-console #seajs-debug-header,#seajs-debug-console #seajs-debug-editor,#seajs-debug-console #seajs-debug-map,#seajs-debug-console #seajs-debug-health{border:0;border-bottom:1px solid lightgrey}#seajs-debug-console #seajs-debug-header{margin:0;padding:5px 5px 5px 10px;height:20px;line-height:20px;font-weight:700;font-size:16px;background:#563d7c;color:#cdbfe3}#seajs-debug-console #seajs-debug-editor,#seajs-debug-console #seajs-debug-map,#seajs-debug-console #seajs-debug-health{min-height:100px;_height:100px;background:#FFF}#seajs-debug-console #seajs-debug-editor,#seajs-debug-console #seajs-debug-map p input{font-family:Courier,monospace;color:#666}#seajs-debug-console #seajs-debug-editor{display:block;width:510px;padding:5px;resize:vertical}#seajs-debug-console #seajs-debug-map{padding:5px 0}#seajs-debug-console #seajs-debug-map p{height:30px;line-height:30px;overflow:hidden;padding-left:10px}#seajs-debug-console #seajs-debug-map p input{padding-left:6px;height:24px;line-height:24px;border:1px solid #dcdcdc;width:200px;vertical-align:middle;*vertical-align:bottom}#seajs-debug-console #seajs-debug-map .seajs-debug-hit input{border-color:#cdbfe3;background-color:#F6F0FF}#seajs-debug-console #seajs-debug-map button{color:#999}#seajs-debug-console #seajs-debug-map button,#seajs-debug-console #seajs-debug-meta button{width:30px;height:30px;line-height:30px;text-align:center}#seajs-debug-console #seajs-debug-status{height:35px}#seajs-debug-console #seajs-debug-status span{display:inline-block;*display:inline;*zoom:1;height:35px;line-height:35px;padding-left:8px;color:#AAA;vertical-align:middle}#seajs-debug-console #seajs-debug-status button{width:35px;height:35px;line-height:35px;color:#999;border:0;font-size:16px;vertical-align:middle;_vertical-align:top}#seajs-debug-console #seajs-debug-status button:hover,#seajs-debug-console #seajs-debug-status button.seajs-debug-status-on:hover{background-color:#f0f0f0;color:#000}#seajs-debug-console #seajs-debug-status button:active,#seajs-debug-console #seajs-debug-status button.seajs-debug-status-on{color:#563d7c;text-shadow:0 0 6px #cdbfe3;background-color:#f0f0f0}#seajs-debug-console #seajs-debug-action{float:right;margin-top:-31px;*margin-top:-32px;margin-right:2px}#seajs-debug-console #seajs-debug-action button{position:relative;z-index:2;width:60px;height:28px;border-radius:2px;text-align:center;color:#333;background-color:#fff;border:1px solid #ccc;text-transform:uppercase;*margin-left:4px}#seajs-debug-console #seajs-debug-action button:hover,#seajs-debug-console #seajs-debug-action button:focus,#seajs-debug-console #seajs-debug-action button:hover,#seajs-debug-console #seajs-debug-action button:active{background-color:#ebebeb;border-color:#adadad}#seajs-debug-console #seajs-debug-action button:active{position:relative;top:1px;-webkit-box-shadow:inset 0 3px 5px rgba(0,0,0,.125);-moz-box-shadow:inset 0 3px 5px rgba(0,0,0,.125);box-shadow:inset 0 3px 5px rgba(0,0,0,.125)}#seajs-debug-console #seajs-debug-meta{position:absolute;right:0;top:0}#seajs-debug-console #seajs-debug-meta button{background:#463265;color:#fff}#seajs-debug-console #seajs-debug-health{height:500px}#seajs-debug-console.seajs-debug-mini{width:30px;height:30px;border:0}#seajs-debug-console{_position:absolute;_top:expression(documentElement.scrollTop+documentElement.clientHeight-this.clientHeight-5)}* html{_background:url(null) no-repeat fixed}");
 });
 
-seajs.use("seajs/seajs-debug/1.0.1/seajs-debug-debug");
+seajs.use("seajs/seajs-debug/1.1.0/seajs-debug-debug");

@@ -39,7 +39,7 @@ define(function(require, exports, module) {
           }
 
           // Add debug file mapping
-          if (config.source && !/\-debug\.(js|css)+/g.test(uri) && !/\/seajs\-debug/g.test(uri)) {
+          if (config.source && !/\-debug\.(js|css)+/g.test(uri)) {
             uri = uri.replace(/\/(.*)\.(js|css)/g, "/$1-debug.$2")
           }
           return uri
@@ -56,7 +56,7 @@ define(function(require, exports, module) {
         if (data.uri) {
           // use data.requestUri not data.uri to avoid combo & timestamp conflict
           // avoid too long url
-          data.requestUri = (data.requestUri + TIME_STAMP).slice(0, 2000)
+          data.requestUri = ((data.requestUri || data.uri) + TIME_STAMP).slice(0, 2000)
         }
       })
 
