@@ -4,6 +4,7 @@ define(function(require) {
 
     var store = require("seajs-debug-store");
 
+    // fake localstorage
     store.set("seajs-debug-config", {
         source: true,
         nocache: true,
