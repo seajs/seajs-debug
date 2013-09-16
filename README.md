@@ -5,6 +5,9 @@
 A Sea.js plugin for debugging freely
 
 
+> To use seajs-debug@1.1.1+,  please use seajs@2.2.0+ !
+
+
 ## Install
 
 Install with spm:
