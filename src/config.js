@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
 
-  var store = require('./seajs-debug-store')
+  var store = require('./store')
 
   // Main config
   var config = {

@@ -4,8 +4,8 @@ define(function(require, exports, module) {
     loc = location,
     global = this
 
-  var store = require('./seajs-debug-store')
-  var config = require('./seajs-debug-config')
+  var store = require('./store')
+  var config = require('./config')
 
   var MAX_TRY = 100
   var pollCount = 0
@@ -15,7 +15,7 @@ define(function(require, exports, module) {
   var MIN_CLS = PREFIX + 'mini'
   var HIT_CLS = PREFIX + 'hit'
 
-  require('./seajs-debug-panel.css')
+  require('./panel.css')
 
   function DebugPanel() {
     this.element = null

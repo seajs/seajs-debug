@@ -5,7 +5,7 @@ define(function(require, exports, module) {
   var doc = document,
     loc = location
 
-  var debugPanel = require('./seajs-debug-panel'),
+  var debugPanel = require('./panel'),
     config = debugPanel.config
 
   // if querystring has seajs-debug, force debug: true
@@ -75,7 +75,7 @@ define(function(require, exports, module) {
 
     // Load log plugin
     config.log && seajs.config({
-      preload: 'seajs-log' // http://assets.spmjs.org/
+      preload: 'seajs-log'
     })
 
     // Load health plugin
