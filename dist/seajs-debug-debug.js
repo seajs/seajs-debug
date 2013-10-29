@@ -35,18 +35,19 @@ define("seajs/seajs-debug/1.1.1/seajs-debug-debug", [ "./panel-debug", "./store-
         // Add timestamp to load file from server, not from browser cache
         // See: https://github.com/seajs/seajs/issues/264#issuecomment-20719662
         if (config.nocache) {
-            var TIME_STAMP = "?t=" + new Date().getTime();
+            var TIME_STAMP = new Date().getTime();
             seajs.on("fetch", function(data) {
                 if (data.uri) {
                     // use data.requestUri not data.uri to avoid combo & timestamp conflict
                     // avoid too long url
-                    data.requestUri = ((data.requestUri || data.uri) + TIME_STAMP).slice(0, 2e3);
+                    var uri = data.requestUri || data.uri;
+                    data.requestUri = (uri + (uri.indexOf("?") === -1 ? "?t=" : "&t=") + TIME_STAMP).slice(0, 2e3);
                 }
             });
             seajs.on("define", function(data) {
                 if (data.uri) {
                     // remove like ?t=12312 or ?
-                    data.uri = data.uri.replace(/\?t*=*\d*$/g, "");
+                    data.uri = data.uri.replace(/[\?&]t*=*\d*$/g, "");
                 }
             });
         }
