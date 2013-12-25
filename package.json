@@ -18,7 +18,13 @@
   "devDependencies": {
     "seatools": "*"
   },
-  "spm": {
-    "output": ["seajs-debug.js"]
+  "config": {
+    "plugin-concat": [
+      "panel.css",
+      "store.js",
+      "config.js",
+      "panel.js",
+      "seajs-debug.js"
+    ]
   }
 }

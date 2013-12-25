@@ -1,8 +1,9 @@
 // Localstorage object
 // Simple Store: https://github.com/marcuswestin/store.js/blob/master/store.js
-define(function(require, exports, module) {
+
   var doc = document,
-    win = this
+    win = window,
+    loc = location
 
   var store = {};
 
@@ -137,9 +138,6 @@ define(function(require, exports, module) {
     store.disabled = true
   }
 
-  module.exports = store;
-
-
   // Helpers
 
   function trim(str) {
@@ -158,4 +156,3 @@ define(function(require, exports, module) {
     }
     return whitespace.indexOf(str.charAt(0)) === -1 ? str : ''
   }
-})

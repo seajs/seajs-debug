@@ -1,7 +1,3 @@
-define(function(require, exports, module) {
-
-  var store = require('./store')
-
   // Main config
   var config = {
     // Force debug when execute debug plugin
@@ -33,6 +29,3 @@ define(function(require, exports, module) {
   for (var key in _config) {
     config[key] = _config[key]
   }
-
-  module.exports = config
-})

@@ -1,12 +1,6 @@
 /**
  * The Sea.js plugin for debugging freely
  */
-define(function(require, exports, module) {
-  var doc = document,
-    loc = location
-
-  var debugPanel = require('./panel'),
-    config = debugPanel.config
 
   // if querystring has seajs-debug, force debug: true
   if (loc.search.indexOf("seajs-debug") > -1) {
@@ -116,4 +110,4 @@ define(function(require, exports, module) {
       return matches
     }
   }
-})
+
