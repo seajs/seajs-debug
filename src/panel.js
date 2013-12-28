@@ -1,11 +1,6 @@
 // Debug Panel Object
-define(function(require, exports, module) {
-  var doc = document,
-    loc = location,
-    global = this
 
-  var store = require('./seajs-debug-store')
-  var config = require('./seajs-debug-config')
+  var global = window
 
   var MAX_TRY = 100
   var pollCount = 0
@@ -14,8 +9,6 @@ define(function(require, exports, module) {
   var STATUS_BUTTON_ON_CLS = PREFIX + 'status-on'
   var MIN_CLS = PREFIX + 'mini'
   var HIT_CLS = PREFIX + 'hit'
-
-  require('./seajs-debug-panel.css')
 
   function DebugPanel() {
     this.element = null
@@ -423,8 +416,6 @@ define(function(require, exports, module) {
 
   debugPanel.config = config
 
-  module.exports = debugPanel
-
   // Helpers
   function validateURL(textval) {
     var urlregex = new RegExp(
@@ -489,4 +480,3 @@ define(function(require, exports, module) {
     for (; i < length; i++) if (array[i] === item) return i;
     return -1;
   }
-})

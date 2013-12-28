@@ -1,12 +1,6 @@
 /**
  * The Sea.js plugin for debugging freely
  */
-define(function(require, exports, module) {
-  var doc = document,
-    loc = location
-
-  var debugPanel = require('./seajs-debug-panel'),
-    config = debugPanel.config
 
   // if querystring has seajs-debug, force debug: true
   if (loc.search.indexOf("seajs-debug") > -1) {
@@ -50,20 +44,21 @@ define(function(require, exports, module) {
     // Add timestamp to load file from server, not from browser cache
     // See: https://github.com/seajs/seajs/issues/264#issuecomment-20719662
     if (config.nocache) {
-      var TIME_STAMP = '?t=' + new Date().getTime()
+      var TIME_STAMP = new Date().getTime()
 
       seajs.on('fetch', function(data) {
         if (data.uri) {
           // use data.requestUri not data.uri to avoid combo & timestamp conflict
           // avoid too long url
-          data.requestUri = ((data.requestUri || data.uri) + TIME_STAMP).slice(0, 2000)
+          var uri = data.requestUri || data.uri
+          data.requestUri = (uri + (uri.indexOf('?') === -1 ? '?t=' : '&t=') + TIME_STAMP).slice(0, 2000)
         }
       })
 
       seajs.on('define', function(data) {
         if (data.uri) {
           // remove like ?t=12312 or ?
-          data.uri = data.uri.replace(/\?t*=*\d*$/g, '')
+          data.uri = data.uri.replace(/[\?&]t*=*\d*$/g, '')
         }
       })
     }
@@ -75,7 +70,7 @@ define(function(require, exports, module) {
 
     // Load log plugin
     config.log && seajs.config({
-      preload: 'seajs-log' // http://assets.spmjs.org/
+      preload: 'seajs-log'
     })
 
     // Load health plugin
@@ -115,4 +110,4 @@ define(function(require, exports, module) {
       return matches
     }
   }
-})
+
