@@ -1,5 +1,4 @@
 {
-  "family": "seajs",
   "name": "seajs-debug",
   "version": "1.1.1",
   "description": "A Sea.js plugin for debugging freely",
@@ -17,6 +16,9 @@
   },
   "devDependencies": {
     "seatools": "*"
+  },
+  "spm": {
+    "main": "dist/seajs-debug.js"
   },
   "config": {
     "plugin-concat": [
